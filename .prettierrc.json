@@ -1,0 +1,18 @@
+{
+    "singleQuote": true,
+    "semi": false,
+    "bracketSpacing": true,
+    "htmlWhitespaceSensitivity": "ignore",
+    "endOfLine": "auto",
+    "trailingComma": "none",
+    "tabWidth": 4,
+    "overrides": [
+        {
+            "files": "*.vue",
+            "options": {
+                "tabWidth": 4,
+                "vueIndentScriptAndStyle": true
+            }
+        }
+    ]
+}
