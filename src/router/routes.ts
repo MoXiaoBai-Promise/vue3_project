@@ -19,7 +19,7 @@ const constRoutes = [
         component: Layout,
         meta: {
             title: 'layout',
-            hidden: false //是否需要在左侧菜单隐藏
+            hidden: true //是否需要在左侧菜单隐藏
         },
         redirect:'/home',
         children: [
@@ -64,6 +64,7 @@ const constRoutes = [
             icon:'Lock',
             hidden: false //是否需要在左侧菜单隐藏
         },
+        redirect:'/acl/user',
         children: [
             {
                 path: 'user',
@@ -107,6 +108,7 @@ const constRoutes = [
             icon:'Goods',
             hidden: false //是否需要在左侧菜单隐藏
         },
+        redirect:'/product/trademark',
         children: [
             {
                 path: 'trademark',
