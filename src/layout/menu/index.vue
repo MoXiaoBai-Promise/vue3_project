@@ -52,8 +52,6 @@
     import { useRouter } from 'vue-router'
     let $router = useRouter()
     function getMenu(value: any) {
-        console.log(value.index)
-
         $router.push({
             name: value.index
         })

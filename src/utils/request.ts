@@ -4,6 +4,8 @@ import axios from 'axios'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { ElNotification,ElMessage } from 'element-plus'
+import useUserStore  from '@/store/user'
+
 
 //1、创建实例
 let request = axios.create({
@@ -14,7 +16,10 @@ let request = axios.create({
 request.interceptors.request.use((config) => {
     NProgress.start()
     // 添加token
-
+    let userStore = useUserStore()
+    if(userStore.token){
+        config.headers.token = userStore.token
+    }
     return config
 })
 

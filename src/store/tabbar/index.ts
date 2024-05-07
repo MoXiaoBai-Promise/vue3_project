@@ -2,10 +2,11 @@
 
 import { defineStore } from 'pinia'
 
-let tabBarStore = defineStore('tabBarStore', {
+let tabBarStore = defineStore('TabBarStore', {
     state: () => {
         return {
-            fold: false
+            fold: false,//控制图标
+            refresh:false //刷新使用
         }
     },
     actions: {},

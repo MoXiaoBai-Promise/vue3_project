@@ -10,8 +10,10 @@ import gloalComponent from '@/components/index'
 //引入全局样式
 import '@/styles/index.scss'
 import router from './router'
-
+//引入路由鉴权
+import '@/permission.ts'
 import Pinia  from './store/index.ts'
+
 const app = createApp(App)
 
 

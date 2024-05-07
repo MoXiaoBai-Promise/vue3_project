@@ -18,7 +18,7 @@
             <Tabbar></Tabbar>
         </div>
         <div class="layout_main" :class="{ fold: getTabBarStore.fold }">
-            <router-view v-slot="{ Component }">
+            <router-view v-slot="{ Component }" v-if="refresh">
                 <transition name="fade">
                     <component :is="Component"></component>
                 </transition>
@@ -38,10 +38,23 @@
     import userStore from '@/store/user/index'
     import Tabbar from '@/layout/tabbar/index.vue'
     import useTabBarStore from '@/store/tabbar'
+    import { ref, watch, nextTick } from 'vue'
     let getTabBarStore = useTabBarStore()
+    let refresh = ref(true) //控制main组件重建和销毁
 
     let menuRoutes = userStore()
     let $route = useRoute()
+
+    //监听getTabBarStore.refresh，如果数据发生了改变，通过改变refresh让main组件销毁后再重建
+    watch(
+        () => getTabBarStore.refresh,
+        () => {
+            refresh.value = false
+            nextTick(() => {
+                refresh.value = true
+            })
+        }
+    )
 </script>
 <style scoped lang="scss">
     .layout_container {
@@ -52,7 +65,7 @@
             height: 100vh;
             background-color: $base-menu-background;
             color: white;
-            transition: all .3s;
+            transition: all 0.3s;
             .scrollbar {
                 height: calc(100vh - $base-logo-height - 10px);
                 .el-menu {
@@ -70,8 +83,8 @@
             width: calc(100% - $base-menu-width);
             top: 0;
             left: $base-menu-width;
-            transition: all .3s;
-            &.fold{
+            transition: all 0.3s;
+            &.fold {
                 width: calc(100% - $base-menu-min-width);
                 left: $base-menu-min-width;
             }
@@ -85,8 +98,8 @@
             left: $base-menu-width;
             padding: 20px;
             overflow: auto;
-            transition: all .3s;
-            &.fold{
+            transition: all 0.3s;
+            &.fold {
                 width: calc(100% - $base-menu-min-width - 40px);
                 left: $base-menu-min-width;
             }
