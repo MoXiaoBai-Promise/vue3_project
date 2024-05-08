@@ -58,11 +58,9 @@
         }
     }
     //退出登录
-    function logOut() {
-        console.log($route)
-
-        userStore.userLogOut() //清除用户信息
-        $router.push({ name: 'login', query: { redirect: $route.path} }) //跳转到登录页面
+    async function logOut() {
+        await userStore.userLogOut() //清除用户信息
+        $router.push({ name: 'login', query: { redirect: $route.path } }) //跳转到登录页面
     }
 </script>
 <style scoped lang="scss"></style>
