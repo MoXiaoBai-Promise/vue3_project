@@ -6,7 +6,7 @@ import 'nprogress/nprogress.css'
 import { ElNotification,ElMessage } from 'element-plus'
 import useUserStore  from '@/store/user'
 
-
+NProgress.configure({ showSpinner: false });
 //1、创建实例
 let request = axios.create({
     baseURL: import.meta.env.VITE_APP_BASE_API, //基础路径/api
@@ -28,11 +28,13 @@ request.interceptors.response.use(
         NProgress.done()
         // 统一处理错误
         if (response.data.code !== 200) {
+            
             ElNotification({
-                message: response.data.data.message,
+                message: response.data.data || response.data.message,
                 type: 'error'
             })
-            return Promise.reject(new Error(response.data.data.message))
+            
+            return Promise.reject(new Error(response.data.data || response.data.message))
         }
         return response.data
     },

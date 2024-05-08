@@ -1,6 +1,6 @@
 <template>
     <div class="layout_container">
-        <div class="layout_left" :class="{ fold: getTabBarStore.fold }">
+        <div class="layout_left">
             <Logo />
             <!-- 滚动组件 -->
             <el-scrollbar class="scrollbar">
@@ -72,9 +72,9 @@
                     border-right: none;
                 }
             }
-            &.fold {
-                width: $base-menu-min-width;
-            }
+            // &.fold {
+            //     width: $base-menu-min-width;
+            // }
         }
 
         .layout_top {
@@ -84,6 +84,8 @@
             top: 0;
             left: $base-menu-width;
             transition: all 0.3s;
+            background: #F8F8FF;
+            border-bottom: 1px solid #DCDCDC;
             &.fold {
                 width: calc(100% - $base-menu-min-width);
                 left: $base-menu-min-width;
@@ -93,7 +95,6 @@
             position: absolute;
             width: calc(100% - $base-menu-width - 40px);
             height: calc(100vh - $base-tabbar-height - 40px);
-            background-color: red;
             top: $base-tabbar-height;
             left: $base-menu-width;
             padding: 20px;

@@ -51,7 +51,8 @@
     })
 
     //用户名自定义验证
-    const validateUsername = (rule: any, value: any, callback: any) => {
+    const validateUsername = (_rule: any, value: any, callback: any) => {
+        
         if (value.length >= 4 && value.length <= 10) {
             callback()
         } else {
@@ -59,7 +60,8 @@
         }
     }
     //密码自定义验证
-    const validatePassword = (rule: any, value: any, callback: any) => {
+    const validatePassword = (_rule: any, value: any, callback: any) => {
+
         if (value.length >= 6 && value.length <= 15) {
             callback()
         } else {
