@@ -1,6 +1,6 @@
 <template>
     <div class="logo" v-if="titleAndLogo.logoHide">
-        <img :src="titleAndLogo.logo" />
+        <img :src="titleAndLogo.logo" style="border-radius: 50%;"/>
         <p>{{ titleAndLogo.title }}</p>
     </div>
 </template>
