@@ -21,14 +21,15 @@ export interface Categroy extends AttrPublic {
 //属性值对象
 export interface AttrValue {
     id?: number
-    valueNanme: string
-    attrId?: number
+    valueName: string
+    attrId?: number,
+    flag?:boolean
 }
 
 //属性对象
 export interface Attr {
     id?: number
-    attrNanme: string
+    attrName: string
     categoryId: number | string
     categoryLevel: number 
     attrValueList: AttrValue[]

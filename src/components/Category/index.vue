@@ -32,6 +32,7 @@
                 </el-select>
             </el-form-item>
         </el-form>
+        <p style="color: red; text-align: center;">分类只能选择手机，其它无数据</p>
     </el-card>
 </template>
 <script lang="ts">
