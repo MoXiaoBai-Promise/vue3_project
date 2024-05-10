@@ -1,12 +1,13 @@
 import request from '@/utils/request'
-import type { Categroy, AttrReqDate,Attr } from './type.ts'
+import type { Categroy, AttrReqDate, Attr } from './type.ts'
 enum API {
     //获取一级分类的接口
     C1_URL = '/admin/product/getCategory1',
     C2_URL = '/admin/product/getCategory2/',
     C3_URL = '/admin/product/getCategory3/',
     ATTR_URL = '/admin/product/attrInfoList/',
-    ATTADDORUPDATEATTRR_URL = '/admin/product/saveAttrInfo'
+    ATTADDORUPDATEATTRR_URL = '/admin/product/saveAttrInfo',
+    DELETEATTR_URL = '/admin/product/deleteAttr/'
 }
 
 //一级分类
@@ -28,5 +29,12 @@ const reqAttr = (
 ) => request.get<any, AttrReqDate>(API.ATTR_URL + `${c1Id}/${c2Id}/${c3Id}`)
 
 //属性新增或修改
-const reqAddOrUpdateAttr = (data:Attr) => request.post<any, any>(API.ATTADDORUPDATEATTRR_URL,data)
-export { reqC1, reqC2, reqC3, reqAttr,reqAddOrUpdateAttr }
+const reqAddOrUpdateAttr = (data: Attr) =>
+    request.post<any, any>(API.ATTADDORUPDATEATTRR_URL, data)
+
+//删除属性
+const reqRemoveAttr = (attrId:number) =>
+    request.delete<any, any>(API.DELETEATTR_URL + attrId)
+
+
+export { reqC1, reqC2, reqC3, reqAttr, reqAddOrUpdateAttr, reqRemoveAttr }
