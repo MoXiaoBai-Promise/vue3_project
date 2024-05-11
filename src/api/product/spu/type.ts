@@ -5,7 +5,7 @@ export interface ResponseData {
     ok: boolean
 }
 
-//SPU数据的ts类型:需要修改
+//SPU数据的ts类型
 export interface SpuData {
     category3Id: string | number
     id?: number
