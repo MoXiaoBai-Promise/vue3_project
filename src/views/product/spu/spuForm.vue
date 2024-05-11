@@ -31,7 +31,7 @@
             <el-form-item label="SPU照片">
                 <el-upload
                     v-model:file-list="imgList"
-                    action="/api/admin/product/fileUpload"
+                    :action="`${VITE_APP_BASE_API}/admin/product/fileUpload`"
                     list-type="picture-card"
                     :on-preview="handlePictureCardPreview"
                     :before-upload="handlerUpload"
@@ -49,11 +49,29 @@
                 </el-dialog>
             </el-form-item>
             <el-form-item label="SPU销售属性">
-                <el-select :placeholder="filterSaleAttr.length == 0?`无`:`还剩${filterSaleAttr.length}个没选择`" style="width: 260px"  v-model="noneSaleAttr">
-                    <el-option :label="item.name" v-for="item in filterSaleAttr"  :key="item.id" :value="`${item.id}:${item.name}`"/>
-                  
+                <el-select
+                    :placeholder="
+                        filterSaleAttr.length == 0
+                            ? `无`
+                            : `还剩${filterSaleAttr.length}个没选择`
+                    "
+                    style="width: 260px"
+                    v-model="noneSaleAttr"
+                >
+                    <el-option
+                        :label="item.name"
+                        v-for="item in filterSaleAttr"
+                        :key="item.id"
+                        :value="`${item.id}:${item.name}`"
+                    />
                 </el-select>
-                <el-button type="primary" icon="Plus" style="margin-left: 5px" :disabled="!noneSaleAttr" @click="addSpuHassaleAttr">
+                <el-button
+                    type="primary"
+                    icon="Plus"
+                    style="margin-left: 5px"
+                    :disabled="!noneSaleAttr"
+                    @click="addSpuHassaleAttr"
+                >
                     添加销售属性
                 </el-button>
                 <el-table
@@ -78,16 +96,25 @@
                                 v-for="tag in row.spuSaleAttrValueList"
                                 :key="tag.id"
                                 closable
-                                style="margin:0 5px"
+                                style="margin: 0 5px"
                             >
                                 {{ tag.saleAttrValueName }}
                             </el-tag>
-                            <el-button type="primary" size="small" icon="Plus" ></el-button>
+                            <el-button
+                                type="primary"
+                                size="small"
+                                icon="Plus"
+                            ></el-button>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" width="120px" align="center">
-                        <template #="{$index}">
-                            <el-button type="danger" size="small" icon="Delete" @click="spuHassaleAttr.splice($index,1)"></el-button>
+                        <template #="{ $index }">
+                            <el-button
+                                type="danger"
+                                size="small"
+                                icon="Delete"
+                                @click="spuHassaleAttr.splice($index, 1)"
+                            ></el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -142,6 +169,7 @@
     let dialogVisible = ref<boolean>(false) //照片放大的显示与隐藏
     let dialogImageUrl = ref<string>('') //图片预览的url
     let noneSaleAttr = ref<string>('') //选择还未收集的销售属性
+    const VITE_APP_BASE_API = import.meta.env.VITE_APP_BASE_API
     //初始化函数
     const init = async (spu: SpuData) => {
         spuData.value = spu
@@ -185,27 +213,25 @@
             return false
         }
     }
-    let filterSaleAttr = computed(()=>{
-        let saleAttr =  allSaleAttr.value.filter((item)=>{
-            return spuHassaleAttr.value.every((item1)=>{
-                return  item.name  !=  item1.saleAttrName
-            }) 
-        }
-            
-        )
+    let filterSaleAttr = computed(() => {
+        let saleAttr = allSaleAttr.value.filter((item) => {
+            return spuHassaleAttr.value.every((item1) => {
+                return item.name != item1.saleAttrName
+            })
+        })
         return saleAttr
     })
 
     //添加销售属性
-    const addSpuHassaleAttr  = ()=>{
-        const [baseSaleAttrId,saleAttrName] = noneSaleAttr.value.split(":")
+    const addSpuHassaleAttr = () => {
+        const [baseSaleAttrId, saleAttrName] = noneSaleAttr.value.split(':')
         spuHassaleAttr.value.push({
             baseSaleAttrId,
             saleAttrName,
-            spuSaleAttrValueList:[]
+            spuSaleAttrValueList: []
         })
         //清空数据
-        noneSaleAttr.value = ""
+        noneSaleAttr.value = ''
     }
     //点击取消按钮
     const cancel = () => {

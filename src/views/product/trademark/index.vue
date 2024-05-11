@@ -84,7 +84,7 @@
                 </el-form-item>
                 <el-form-item label="品牌LOGO" prop="logoUrl">
                     <el-upload
-                        action="/api/admin/product/fileUpload"
+                        :action="`${VITE_APP_BASE_API}/admin/product/fileUpload`"
                         class="avatar-uploader"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
@@ -117,6 +117,7 @@
     }
 </script>
 <script setup lang="ts">
+
     import {
         reqTardeMark,
         reqAddOrUpdateTardeMark,
@@ -131,7 +132,6 @@
     } from '@/api/product/tardemark/type.ts'
     import useUserStore from '@/store/user'
     const userStore = useUserStore()
-
     let pageNo = ref<number>(1) //第几页
     let limit = ref<number>(3) //每一页展示几条数据
     let total = ref<number>(0) //总共多少条数据
@@ -142,9 +142,8 @@
         tmName: '',
         logoUrl: ''
     })
-
+    let VITE_APP_BASE_API = import.meta.env.VITE_APP_BASE_API
     let form = ref()
-
     //挂在完成就发请求拿数据并展示
     onMounted(() => {
         getTardeMark()
@@ -251,13 +250,14 @@
 
     //品牌删除点击确认删除
     const confirmDelete = async (id: number) => {
-        console.log(id);
-        
+
         await reqDeleteTardeMark(id)
-        ElMessage.success("删除品牌成功！")
+        ElMessage.success('删除品牌成功！')
 
         //删除成功重新发请求拿数据，如果删除的是最后一个那进入前一页，如果删除的不是最后一个在当前页
-        getTardeMark(tardeMarkList.value.length === 1? pageNo.value - 1:pageNo.value)
+        getTardeMark(
+            tardeMarkList.value.length === 1 ? pageNo.value - 1 : pageNo.value
+        )
     }
 </script>
 
