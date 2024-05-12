@@ -17,12 +17,12 @@ enum API {
     //获取某一个SPU下全部的已有的销售属性
     SPUHASSALEATTR_URL = '/admin/product/spuSaleAttrList/',
     //获取整个项日全部的销售属性[颜色、版本、尺码]
-    ALLSALEATTR_URL= '/admin/product/baseSaleAttrList',
+    ALLSALEATTR_URL = '/admin/product/baseSaleAttrList',
     //新增spu
     ADDSPU_URL = '/admin/product/saveSpuInfo',
     //更新已有的spu
     UPDATESPU_URL = '/admin/product/updateSpuInfo'
-} 
+}
 
 //获取SPU数据
 const reqGetSpu = (page: number, limit: number, category3Id: number | string) =>
@@ -34,7 +34,7 @@ const reqGetSpu = (page: number, limit: number, category3Id: number | string) =>
 const getAllTradeMark = () =>
     request.get<any, AllTradeMark>(API.ALLTRADEMARK_URL)
 //获取图片list
-const getImageList = (spuId: number |undefined) =>
+const getImageList = (spuId: number | undefined) =>
     request.get<any, SpuHasImg>(API.IMAGE_URL + spuId)
 
 //获取某一个SPU下全部的已有的销售属性
@@ -46,5 +46,14 @@ const getAllSaleAttr = () =>
     request.get<any, HasSaleAttrResponseData>(API.ALLSALEATTR_URL)
 
 //新增或更新已有的spu
-const addOrUpdateSpu = (data:SpuData)=>request.post<any,any>(data.id?API.UPDATESPU_URL:API.ADDSPU_URL,data)
-export { reqGetSpu, getAllTradeMark, getImageList, getSpuHassaleAttr,getAllSaleAttr ,addOrUpdateSpu}
+const addOrUpdateSpu = (data: SpuData) =>
+    request.post<any, any>(data.id ? API.UPDATESPU_URL : API.ADDSPU_URL, data)
+
+export {
+    reqGetSpu,
+    getAllTradeMark,
+    getImageList,
+    getSpuHassaleAttr,
+    getAllSaleAttr,
+    addOrUpdateSpu
+}
