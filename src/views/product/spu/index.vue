@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Category @sendDate="getCId" />
+        <Category @sendDate="getCId" :isshow="isshow" />
         <el-card style="margin: 10px 0">
             <div v-show="isshow == 0">
                 <el-button
@@ -32,7 +32,7 @@
                         prop="description"
                     ></el-table-column>
                     <el-table-column label="操作">
-                        <template #="{ row, $index }">
+                        <template #="{ row }">
                             <el-button
                                 type="primary"
                                 icon="Plus"
@@ -73,7 +73,11 @@
                 />
             </div>
             <!-- 添加|修改Sku -->
-            <SpuForm v-show="isshow === 1" @changeIsshow="changeIsshow" ref="spu"/>
+            <SpuForm
+                v-show="isshow === 1"
+                @changeIsshow="changeIsshow"
+                ref="spu"
+            />
             <!-- 添加Sku -->
             <SkuForm v-show="isshow === 2" />
         </el-card>
@@ -89,7 +93,11 @@
     import SpuForm from './spuForm.vue'
     import { ref } from 'vue'
     import { reqGetSpu } from '@/api/product/spu'
-    import type { HasSpuResponseData, Records,SpuData } from '@/api/product/spu/type.ts'
+    import type {
+        HasSpuResponseData,
+        Records,
+        SpuData
+    } from '@/api/product/spu/type.ts'
     let c1Id = ref<number | string>('') //选中的一级分类的id
     let c2Id = ref<number | string>('') //选中的二级级分类的id
     let c3Id = ref<number | string>('') //选中的三级级分类的id
@@ -134,15 +142,17 @@
     //添加SPU按钮
     const addSpu = () => {
         isshow.value = 1
+        spu.value.initAdd(c3Id.value)
     }
     //修改SPU
-    const updateSpu = (row:SpuData) => {
+    const updateSpu = (row: SpuData) => {
         isshow.value = 1
-        spu.value.init(row)
+        spu.value.initUpdate(row)
     }
     //子组件修改isshow自定义事件的回调
-    const changeIsshow = () => {
+    const changeIsshow = (scene: string) => {
         isshow.value = 0
+        getSpu(scene == 'update' ? pageNo.value : 1)
     }
 </script>
 <style scoped lang="scss"></style>

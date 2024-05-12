@@ -173,7 +173,8 @@
             attrName: '',
             attrValueList: [],
             categoryId: '',
-            categoryLevel: 3
+            categoryLevel: 3,
+            id:''
         })
         isshow.value = 1
     }

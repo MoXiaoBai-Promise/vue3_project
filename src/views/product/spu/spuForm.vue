@@ -93,17 +93,30 @@
                     <el-table-column label="销售属性值">
                         <template #="{ row }">
                             <el-tag
-                                v-for="tag in row.spuSaleAttrValueList"
+                                v-for="(tag, index) in row.spuSaleAttrValueList"
                                 :key="tag.id"
                                 closable
                                 style="margin: 0 5px"
+                                @close="
+                                    row.spuSaleAttrValueList.splice(index, 1)
+                                "
                             >
                                 {{ tag.saleAttrValueName }}
                             </el-tag>
+                            <el-input
+                                placeholder="请输入属性值"
+                                size="small"
+                                style="width: 100px; margin: 0 5px"
+                                v-if="row.flag"
+                                v-model="row.saleAttrValue"
+                                @blur="blurPushAttrValue(row)"
+                            ></el-input>
                             <el-button
+                                v-else
                                 type="primary"
                                 size="small"
                                 icon="Plus"
+                                @click="addAttrClick(row)"
                             ></el-button>
                         </template>
                     </el-table-column>
@@ -120,7 +133,13 @@
                 </el-table>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary">保存</el-button>
+                <el-button
+                    type="primary"
+                    @click="save"
+                    :disabled="spuHassaleAttr.length === 0"
+                >
+                    保存
+                </el-button>
                 <el-button type="primary" @click="cancel">取消</el-button>
             </el-form-item>
         </el-form>
@@ -137,7 +156,8 @@
         getAllTradeMark,
         getImageList,
         getSpuHassaleAttr,
-        getAllSaleAttr
+        getAllSaleAttr,
+        addOrUpdateSpu
     } from '@/api/product/spu'
     import type {
         AllTradeMark,
@@ -170,8 +190,8 @@
     let dialogImageUrl = ref<string>('') //图片预览的url
     let noneSaleAttr = ref<string>('') //选择还未收集的销售属性
     const VITE_APP_BASE_API = import.meta.env.VITE_APP_BASE_API
-    //初始化函数
-    const init = async (spu: SpuData) => {
+    //修改初始化函数
+    const initUpdate = async (spu: SpuData) => {
         spuData.value = spu
         //获取全部品牌的数据
         let result: AllTradeMark = await getAllTradeMark()
@@ -191,6 +211,33 @@
             spu.id as number
         )
         spuHassaleAttr.value = result2.data
+
+        //获取某一个SPU下全部的已有的销售属性
+        let result3: HasSaleAttrResponseData = await getAllSaleAttr()
+        allSaleAttr.value = result3.data
+    }
+    //添加初始化函数
+    const initAdd = async (category3Id: number) => {
+        //先清空数据
+        spuData.value = {
+            //spu的数据
+            category3Id: '', //收集三级分类的ID
+            spuName: '', //SPU的名字
+            description: '', //SPU的描述
+            tmId: '', //品牌的ID
+            spuImageList: [],
+            spuSaleAttrList: []
+        }
+        //照片墙清空
+        imgList.value = []
+
+        spuHassaleAttr.value = []
+        noneSaleAttr.value = ''
+
+        spuData.value.category3Id = category3Id
+        //获取全部品牌的数据
+        let result: AllTradeMark = await getAllTradeMark()
+        allTradeMark.value = result.data
 
         //获取某一个SPU下全部的已有的销售属性
         let result3: HasSaleAttrResponseData = await getAllSaleAttr()
@@ -233,10 +280,55 @@
         //清空数据
         noneSaleAttr.value = ''
     }
-    //点击取消按钮
-    const cancel = () => {
+    //点击添加销售属性
+    const addAttrClick = (row: SaleAttr) => {
+        row.flag = true
+        row.saleAttrValue = ''
+    }
+    //
+    const blurPushAttrValue = (row: SaleAttr) => {
+        //结构出id和value
+        let { baseSaleAttrId, saleAttrValue } = row
+        row.flag = false
+        if (saleAttrValue?.trim() == '') {
+            ElMessage.error('属性值名称不允许为空！')
+
+            return
+        }
+        //判断属性值是否纯在
+        let verifyRep = row.spuSaleAttrValueList.find((item) => {
+            return item.saleAttrValueName.trim() == saleAttrValue?.trim()
+        })
+
+        if (verifyRep) {
+            ElMessage.error('属性值名称不允许重复！')
+            return
+        }
+
+        row.spuSaleAttrValueList.push({
+            baseSaleAttrId,
+            saleAttrValueName: saleAttrValue as string
+        })
+    }
+    //保存
+    const save = async () => {
+        //照片墙的数据
+        spuData.value.spuImageList = imgList.value.map((item: any) => {
+            return {
+                imgName: item.name,
+                imgUrl: (item.response && item.response.data) || item.url
+            }
+        })
+        //销售属性的数据
+        spuData.value.spuSaleAttrList = spuHassaleAttr.value
+        let res = await addOrUpdateSpu(spuData.value)
+        ElMessage.success(res.message)
         $emit('changeIsshow')
     }
-    defineExpose({ init })
+    //点击取消按钮
+    const cancel = () => {
+        $emit('changeIsshow', spuData.value.id ? 'update' : 'add')
+    }
+    defineExpose({ initUpdate, initAdd })
 </script>
 <style scoped lang="scss"></style>
