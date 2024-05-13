@@ -26,6 +26,7 @@
     "@types/nprogress": "^0.2.3",
     "@vitejs/plugin-vue": "^5.0.4",
     "mockjs": "^1.1.0",
+    "sass": "^1.77.1",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-plugin-mock": "2.9.6",
