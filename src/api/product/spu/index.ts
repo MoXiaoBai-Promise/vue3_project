@@ -5,7 +5,9 @@ import type {
     SpuHasImg,
     SaleAttrResponseData,
     HasSaleAttrResponseData,
-    SpuData
+    SpuData,
+    SkuData,
+    SkuInfoData
 } from './type.ts'
 enum API {
     //获取一级分类的接口
@@ -21,7 +23,13 @@ enum API {
     //新增spu
     ADDSPU_URL = '/admin/product/saveSpuInfo',
     //更新已有的spu
-    UPDATESPU_URL = '/admin/product/updateSpuInfo'
+    UPDATESPU_URL = '/admin/product/updateSpuInfo',
+    //添加sku
+    ADDSKU_URL = '/admin/product/saveSkuInfo',
+    //查看已有spu下的sku
+    SKUINFO_URL = '/admin/product/findBySpuId/',
+    //删除SPU
+    REMOVESPU_URL = '/admin/product/deleteSpu/'
 }
 
 //获取SPU数据
@@ -49,11 +57,25 @@ const getAllSaleAttr = () =>
 const addOrUpdateSpu = (data: SpuData) =>
     request.post<any, any>(data.id ? API.UPDATESPU_URL : API.ADDSPU_URL, data)
 
+//添加sku数据
+const reqAddSku = (data: SkuData) =>
+    request.post<any, any>(API.ADDSKU_URL, data)
+
+//查看已有spu下的sku
+const reqSkuInfo = (spuId: number | string) =>
+    request.get<any, SkuInfoData>(API.SKUINFO_URL + spuId)
+//删除spu
+const reqremovespu = (spuId: number | string) =>
+    request.delete<any, any>(API.REMOVESPU_URL + spuId)
+
 export {
     reqGetSpu,
     getAllTradeMark,
     getImageList,
     getSpuHassaleAttr,
     getAllSaleAttr,
-    addOrUpdateSpu
+    addOrUpdateSpu,
+    reqAddSku,
+    reqSkuInfo,
+    reqremovespu
 }

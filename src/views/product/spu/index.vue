@@ -38,7 +38,7 @@
                                 icon="Plus"
                                 size="small"
                                 title="添加SKU"
-                                @click="addSku"
+                                @click="addSku(row)"
                             ></el-button>
                             <el-button
                                 type="warning"
@@ -52,13 +52,24 @@
                                 icon="View"
                                 size="small"
                                 title="查看SKU列表"
+                                @click="lookSku(row)"
                             ></el-button>
-                            <el-button
-                                type="danger "
+
+                            <el-popconfirm
+                                :title="`确定删除${row.spuName}吗？`"
+                                width="266px"
                                 icon="Delete"
-                                size="small"
-                                title="删除SPU"
-                            ></el-button>
+                                @confirm="removespu(row)"
+                            >
+                                <template #reference>
+                                    <el-button
+                                        type="danger "
+                                        icon="Delete"
+                                        size="small"
+                                        title="删除SPU"
+                                    ></el-button>
+                                </template>
+                            </el-popconfirm>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -80,8 +91,35 @@
                 ref="spu"
             />
             <!-- 添加SKU -->
-            <SkuForm v-show="isshow === 2" @skuChangeIsshow="skuChangeIsshow"/>
+            <SkuForm
+                v-show="isshow === 2"
+                @skuChangeIsshow="skuChangeIsshow"
+                ref="sku"
+            />
         </el-card>
+
+        <el-dialog title="查看sku" v-model="lookSkuShow" width="50%">
+            <el-table :data="lookSkuData">
+                <el-table-column
+                    label="SKU名字"
+                    prop="skuName"
+                ></el-table-column>
+                <el-table-column label="SKU价格" prop="price"></el-table-column>
+                <el-table-column
+                    label="SKU重量"
+                    prop="weight"
+                ></el-table-column>
+                <el-table-column label="SKU图片">
+                    <template #="{ row }">
+                        <el-image
+                            :src="row.skuDefaultImg"
+                            fit="cover"
+                            :lazy="true"
+                        ></el-image>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-dialog>
     </div>
 </template>
 <script lang="ts">
@@ -93,12 +131,15 @@
     import SkuForm from './skuForm.vue'
     import SpuForm from './spuForm.vue'
     import { ref } from 'vue'
-    import { reqGetSpu } from '@/api/product/spu'
+    import { reqGetSpu, reqSkuInfo, reqremovespu } from '@/api/product/spu'
     import type {
         HasSpuResponseData,
         Records,
-        SpuData
+        SpuData,
+        SkuInfoData,
+        SkuData
     } from '@/api/product/spu/type.ts'
+    import { ElMessage } from 'element-plus'
     let c1Id = ref<number | string>('') //选中的一级分类的id
     let c2Id = ref<number | string>('') //选中的二级级分类的id
     let c3Id = ref<number | string>('') //选中的三级级分类的id
@@ -108,6 +149,9 @@
     let total = ref<number>(0)
     let isshow = ref<number>(0) //0：显示已有spu ，1：添加或修改spu，2：添加sku
     let spu = ref() //spuForm组件实例
+    let sku = ref() //skuForm组件实例
+    let lookSkuShow = ref(false)
+    let lookSkuData = ref<SkuData[]>([])
     const getCId = async (
         //拿到三级联动的id
         c1: number | string,
@@ -156,13 +200,32 @@
         getSpu(scene == 'update' ? pageNo.value : 1)
     }
     //添加Sku
-    const addSku = ()=>{
+    const addSku = (row: SpuData) => {
         isshow.value = 2
+        sku.value.initSku(c1Id.value, c2Id.value, row)
     }
 
     //sku改变isshow
-    const skuChangeIsshow = ()=>{
+    const skuChangeIsshow = () => {
         isshow.value = 0
     }
+
+    //查看sku
+    const lookSku = async (row: SpuData) => {
+        let res: SkuInfoData = await reqSkuInfo(row.id as number)
+        lookSkuData.value = res.data
+
+        lookSkuShow.value = true
+    }
+
+    //删除spu
+    const removespu = async (spu: SpuData) => {
+        await reqremovespu(spu.id as number)
+
+        ElMessage.success('删除品牌成功')
+        getSpu(recordes.value.length > 1 ? pageNo.value : pageNo.value - 1)
+    }
+    
+    
 </script>
 <style scoped lang="scss"></style>

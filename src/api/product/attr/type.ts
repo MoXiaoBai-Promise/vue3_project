@@ -32,6 +32,7 @@ export interface Attr {
     attrName: string
     categoryId: number | string
     categoryLevel: number 
+    attrIdAndValueId?:string
     attrValueList: AttrValue[]
 }
 
