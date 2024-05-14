@@ -38,6 +38,7 @@
                                 icon="Plus"
                                 size="small"
                                 title="添加SKU"
+                                @click="addSku"
                             ></el-button>
                             <el-button
                                 type="warning"
@@ -72,14 +73,14 @@
                     @size-change="changeLimit"
                 />
             </div>
-            <!-- 添加|修改Sku -->
+            <!-- 添加|修改SPU -->
             <SpuForm
                 v-show="isshow === 1"
                 @changeIsshow="changeIsshow"
                 ref="spu"
             />
-            <!-- 添加Sku -->
-            <SkuForm v-show="isshow === 2" />
+            <!-- 添加SKU -->
+            <SkuForm v-show="isshow === 2" @skuChangeIsshow="skuChangeIsshow"/>
         </el-card>
     </div>
 </template>
@@ -153,6 +154,15 @@
     const changeIsshow = (scene: string) => {
         isshow.value = 0
         getSpu(scene == 'update' ? pageNo.value : 1)
+    }
+    //添加Sku
+    const addSku = ()=>{
+        isshow.value = 2
+    }
+
+    //sku改变isshow
+    const skuChangeIsshow = ()=>{
+        isshow.value = 0
     }
 </script>
 <style scoped lang="scss"></style>

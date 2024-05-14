@@ -2,7 +2,11 @@
     <el-card>
         <el-form :inline="true">
             <el-form-item label="一级分类">
-                <el-select v-model="c1Id" @change="getC2List" :disabled="isshow == 1">
+                <el-select
+                    v-model="c1Id"
+                    @change="getC2List"
+                    :disabled="isshow == 1 || isshow == 2"
+                >
                     <el-option
                         :value="item.id"
                         v-for="item in c1List"
@@ -12,7 +16,11 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="二级分类">
-                <el-select v-model="c2Id" :disabled="!c1Id || isshow == 1" @change="getC3List">
+                <el-select
+                    v-model="c2Id"
+                    :disabled="!c1Id || isshow == 1 || isshow == 2"
+                    @change="getC3List"
+                >
                     <el-option
                         :label="item.name"
                         :value="item.id"
@@ -22,7 +30,10 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="三级分类">
-                <el-select v-model="c3Id" :disabled="!c2Id || isshow == 1 ">
+                <el-select
+                    v-model="c3Id"
+                    :disabled="!c2Id || isshow == 1 || isshow == 2"
+                >
                     <el-option
                         :label="item.name"
                         :value="item.id"
@@ -32,7 +43,9 @@
                 </el-select>
             </el-form-item>
         </el-form>
-        <p style="color: red; text-align: center;">分类只能选择手机，其它无数据</p>
+        <p style="color: red; text-align: center">
+            分类只能选择手机，其它无数据
+        </p>
     </el-card>
 </template>
 <script lang="ts">
