@@ -9,6 +9,7 @@
                     <el-button
                         type="primary"
                         size="default"
+                        :disabled="!username"
                         @click="getUserInfo()"
                     >
                         搜索
