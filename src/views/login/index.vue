@@ -53,19 +53,19 @@
     //用户名自定义验证
     const validateUsername = (_rule: any, value: any, callback: any) => {
         
-        if (value.length >= 4 && value.length <= 10) {
+        if (value.length >= 4 && value.length <= 20) {
             callback()
         } else {
-            callback(new Error('用户名必须在4——10位之间！'))
+            callback(new Error('用户名必须在4——20位之间！'))
         }
     }
     //密码自定义验证
     const validatePassword = (_rule: any, value: any, callback: any) => {
 
-        if (value.length >= 6 && value.length <= 15) {
+        if (value.length >= 6 && value.length <= 20) {
             callback()
         } else {
-            callback(new Error('密码必须在6——15位之间'))
+            callback(new Error('密码必须在6——20位之间！'))
         }
     }
     //验证规则

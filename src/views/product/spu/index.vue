@@ -99,7 +99,7 @@
         </el-card>
 
         <el-dialog title="查看sku" v-model="lookSkuShow" width="50%">
-            <el-table :data="lookSkuData">
+            <el-table :data="lookSkuData" border>
                 <el-table-column
                     label="SKU名字"
                     prop="skuName"

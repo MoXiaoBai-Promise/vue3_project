@@ -5,7 +5,7 @@
                 添加品牌
             </el-button>
 
-            <el-table stripe style="width: 100%" :data="tardeMarkList" border>
+            <el-table stripe style="width: 100%;margin: 10px 0 " :data="tardeMarkList" border>
                 <el-table-column
                     label="序号"
                     width="60px"

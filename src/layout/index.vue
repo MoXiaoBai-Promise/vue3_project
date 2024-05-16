@@ -100,6 +100,7 @@
             padding: 20px;
             overflow: auto;
             transition: all 0.3s;
+            background-color: white;
             &.fold {
                 width: calc(100% - $base-menu-min-width - 40px);
                 left: $base-menu-min-width;
