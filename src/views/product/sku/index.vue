@@ -3,19 +3,19 @@
         <el-table border stripe style="margin: 10px 0" :data="skuArr">
             <el-table-column
                 type="index"
-                width="50"
+                width="80"
                 label="序号"
                 align="center"
             />
             <el-table-column
                 label="名称"
-                width="200"
+                width="250"
                 show-overflow-tooltip
                 prop="skuName"
             ></el-table-column>
             <el-table-column
                 label="描述"
-                width="200"
+                width="250"
                 show-overflow-tooltip
                 prop="skuDesc"
             ></el-table-column>
@@ -31,12 +31,12 @@
             </el-table-column>
             <el-table-column
                 label="重量"
-                width="150"
+                width="250"
                 prop="weight"
             ></el-table-column>
             <el-table-column
                 label="价格"
-                width="150"
+                width="250"
                 prop="price"
             ></el-table-column>
             <el-table-column
@@ -185,7 +185,6 @@
     const getSku = async (pager = 1) => {
         pageNo.value = pager
         let result: SkuBackData = await reqSkuList(pageNo.value, limit.value)
-        console.log(result)
 
         total.value = result.data.total
         skuArr.value = result.data.records
@@ -210,7 +209,6 @@
     //点击查看sku
     const drawerInfo = async (row: any) => {
         let result = await reqInfoSku(row.id)
-        console.log(result)
         skuInfo.value = result.data
         drawer.value = true
     }
