@@ -68,14 +68,23 @@
                         >
                             编辑
                         </el-button>
-                        <el-button
-                            type="danger "
-                            size="default"
-                            @click=""
+
+                        <el-popconfirm
+                            :title="`确定删除${row.roleName}吗？`"
+                            width="266px"
                             icon="Delete"
+                            @confirm="removeRole(row)"
                         >
-                            删除
-                        </el-button>
+                            <template #reference>
+                                <el-button
+                                    type="danger "
+                                    size="default"
+                                    icon="Delete"
+                                >
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-popconfirm>
                     </template>
                 </el-table-column>
             </el-table>
@@ -121,13 +130,14 @@
             </template>
             <template #default>
                 <div>
-                    <el-tree    
+                    <el-tree
                         :data="menuAllList"
                         show-checkbox
                         default-expand-all
                         node-key="id"
-                        :default-checked-keys="[5]"
+                        :default-checked-keys="selectedArr"
                         :props="defaultProps"
+                        ref="tree"
                     />
                 </div>
             </template>
@@ -148,8 +158,19 @@
     }
 </script>
 <script setup lang="ts">
-    import { reqAllRole, reqAddOrUpdateRole ,reqAllMenuList} from '@/api/acl/role'
-    import type { RoleResponseData, RoleData ,MunuData,MenuResponseData} from '@/api/acl/role/type'
+    import {
+        reqAllRole,
+        reqAddOrUpdateRole,
+        reqAllMenuList,
+        reqPermistion,
+        reqRemoveRole
+    } from '@/api/acl/role'
+    import type {
+        RoleResponseData,
+        RoleData,
+        MunuData,
+        MenuResponseData
+    } from '@/api/acl/role/type'
     import { ElMessage } from 'element-plus'
     import { ref, onMounted, reactive } from 'vue'
 
@@ -157,14 +178,18 @@
     let limit = ref<number>(3)
     let total = ref<number>(0)
     let roleName = ref<string>('') //角色名称
+    let roleId = ref<number | string>('') //角色id分配权限时用
     let allRoleList = ref<RoleData[]>([])
     let dialogIsshow = ref<boolean>(false)
     let form = ref() //form表单的vc
     let roleData = reactive<RoleData>({
+        //角色数据
         roleName: ''
     })
     let drawer = ref<boolean>(false)
-    let menuAllList = ref<MunuData[]>([])
+    let menuAllList = ref<MunuData[]>([]) //菜单list
+    let selectedArr = ref<number[]>([]) //树形组件选中的id
+    let tree = ref() //树节点vc
     onMounted(() => {
         getAllRole()
     })
@@ -224,21 +249,50 @@
         ]
     })
     //分配权限确定按钮
-    const confirmClick = () => {
+    const confirmClick = async () => {
         drawer.value = false
+        await reqPermistion(roleId.value as number, [
+            ...tree.value.getCheckedKeys(),
+            ...tree.value.getHalfCheckedKeys()
+        ])
+        ElMessage.success('分配权限成功')
+
+        window.location.reload()
     }
     //分配权限按钮
-    const privileges = async(row:RoleData) => {
+    const privileges = async (row: RoleData) => {
+        roleId.value = row.id as number
         drawer.value = true
-        let result:MenuResponseData = await reqAllMenuList(row.id as number)
-        console.log(result);
+        let result: MenuResponseData = await reqAllMenuList(row.id as number)
         menuAllList.value = result.data
-
+        treeSelected(menuAllList.value, [])
     }
+    //树形组件默认选中处理
+    const treeSelected = (allData: any, arr: any) => {
+        allData.forEach((item: any) => {
+            if (item.children.length === 0 && item.select === true) {
+                arr.push(item.id)
+            }
+            if (item.children && item.children.length > 0) {
+                treeSelected(item.children, arr)
+            }
+        })
 
+        selectedArr.value = arr
+    }
     const defaultProps = {
         children: 'children',
         label: 'name'
+    }
+
+
+    //删除角色
+    const removeRole = async (row: RoleData) => {
+        await reqRemoveRole(row.id as number)
+        ElMessage.success('删除角色成功！')
+        getAllRole(
+            allRoleList.value.length === 1 ? pageNo.value - 1 : pageNo.value
+        )
     }
 </script>
 <style scoped lang="scss">
