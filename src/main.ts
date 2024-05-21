@@ -9,6 +9,7 @@ import 'virtual:svg-icons-register'
 import gloalComponent from '@/components/index'
 //引入全局样式
 import '@/styles/index.scss'
+import 'element-plus/theme-chalk/dark/css-vars.css'
 import router from './router'
 //引入路由鉴权
 import '@/permission.ts'
