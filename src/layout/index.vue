@@ -84,8 +84,8 @@
             top: 0;
             left: $base-menu-width;
             transition: all 0.3s;
-            background: #F8F8FF;
-            border-bottom: 1px solid #DCDCDC;
+            background: #f8f8ff;
+            border-bottom: 1px solid #dcdcdc;
             &.fold {
                 width: calc(100% - $base-menu-min-width);
                 left: $base-menu-min-width;

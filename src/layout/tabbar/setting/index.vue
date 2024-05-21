@@ -7,7 +7,18 @@
         @click="fullScreen"
         v-if="screenfull.isEnabled"
     />
-    <el-button icon="Setting" size="small" circle />
+
+    <el-popover placement="top-start" title="设置" :width="300" trigger="hover">
+        <template #reference>
+            <el-button icon="Setting" size="small" circle />
+        </template>
+        <el-form>
+            <el-form-item label="暗黑模式">
+                <el-switch v-model="dark" class="ml-2" @change="changeDark" />
+            </el-form-item>
+        </el-form>
+    </el-popover>
+
     <img
         :src="userStore.avatar"
         style="width: 24px; height: 24px; border-radius: 50%; margin: 0 10px"
@@ -37,6 +48,7 @@
     import screenfull from 'screenfull'
     import useUserStore from '@/store/user/index'
     import { useRouter, useRoute } from 'vue-router'
+    import { ref } from 'vue'
 
     let userStore = useUserStore()
 
@@ -45,6 +57,7 @@
     let $router = useRouter()
 
     let $route = useRoute()
+    let dark = ref<boolean>(false) //暗黑模式
     //刷新main组件
     function refresh() {
         getTabBarStore.refresh = !getTabBarStore.refresh
@@ -61,6 +74,24 @@
     async function logOut() {
         await userStore.userLogOut() //清除用户信息
         $router.push({ name: 'login', query: { redirect: $route.path } }) //跳转到登录页面
+    }
+    
+    //暗黑模式切换
+    const changeDark = () => {
+        let html = document.documentElement
+        let layout_top = document.getElementsByClassName('layout_top') as HTMLCollectionOf<HTMLElement>
+        let layout_main = document.getElementsByClassName('layout_main') as HTMLCollectionOf<HTMLElement>
+        
+        if (dark.value) {
+           
+            layout_top[0].style.backgroundColor ='#191919';
+            layout_main[0].style.backgroundColor ='#191919';
+            html.className = 'dark'
+        } else {
+            html.classList.remove('dark')
+            layout_top[0].style.backgroundColor ='#f8f8ff';
+            layout_main[0].style.backgroundColor ='white';
+        }
     }
 </script>
 <style scoped lang="scss"></style>

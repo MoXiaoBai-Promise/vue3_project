@@ -41,18 +41,17 @@
 <script setup lang="ts">
     import { reactive, ref } from 'vue'
     import { User, Lock } from '@element-plus/icons-vue'
-    import { useRouter,useRoute } from 'vue-router'
+    import { useRouter, useRoute } from 'vue-router'
     import { ElNotification } from 'element-plus'
     import userStore from '@/store/user/index'
     import getTime from '@/utils/getTime'
     let loginFrom = reactive({
-        username: '',//用户名
+        username: '', //用户名
         password: '' //密码
     })
 
     //用户名自定义验证
     const validateUsername = (_rule: any, value: any, callback: any) => {
-        
         if (value.length >= 4 && value.length <= 20) {
             callback()
         } else {
@@ -61,7 +60,6 @@
     }
     //密码自定义验证
     const validatePassword = (_rule: any, value: any, callback: any) => {
-
         if (value.length >= 6 && value.length <= 20) {
             callback()
         } else {
@@ -98,10 +96,11 @@
     async function login() {
         await loginForms.value.validate() //表单验证
 
-        await userStore().userLogin(loginFrom) 
+        await userStore().userLogin(loginFrom)
+
         //判断，如果query携带redirect，跳转至redirect，否则跳转至首页
-        let redirect:any = $route.query.redirect
-        $router.push({path:redirect?redirect:'/'})
+        let redirect: any = $route.query.redirect
+        $router.push({ path: redirect ? redirect : '/' })
         ElNotification({
             title: 'hi,' + getTime() + '好！',
             message: '登录成功',

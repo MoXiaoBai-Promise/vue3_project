@@ -1,14 +1,17 @@
 <template>
-  <div>
-    数据大屏
-  </div>
+    <div id="screen">
+
+    </div>
 </template>
 <script lang="ts">
     export default {
         name: 'Screen'
     }
 </script>
-<script setup lang='ts'>
+<script setup lang="ts">
+    import { ref } from 'vue'
+
 </script>
-<style scoped lang='scss'>
+<style scoped lang="scss">
+
 </style>
