@@ -24,7 +24,7 @@ router.beforeEach(async (to, _from, next) => {
     document.title = `${setting.title}__${to.meta.title}`
     let token = userStore.token
     let username = userStore.username
-
+ 
     if (token) {
         //登录成功不允许再访问login页面
         if (to.name == 'login') {
@@ -57,7 +57,6 @@ router.beforeEach(async (to, _from, next) => {
         if (to.name == 'login') {
             next()
         } else {
-            await next()
             next({ name: 'login', query: { redirect: to.path } })
         }
     }
