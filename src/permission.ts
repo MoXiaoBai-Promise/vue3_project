@@ -57,7 +57,6 @@ router.beforeEach(async (to, _from, next) => {
         if (to.name == 'login') {
             next()
         } else {
-            await next()
             next({ name: 'login', query: { redirect: to.path } })
         }
     }

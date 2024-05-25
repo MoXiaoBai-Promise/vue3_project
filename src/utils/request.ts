@@ -8,6 +8,7 @@ import useUserStore  from '@/store/user'
 
 NProgress.configure({ showSpinner: false });
 //1、创建实例
+
 let request = axios.create({
     baseURL: import.meta.env.VITE_APP_BASE_API, //基础路径/api
     timeout: 5000 //超时时间
