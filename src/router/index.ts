@@ -1,12 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 // import Home from '@/views/home/index.vue'
-import {constRoutes} from './routes'
-
-
+import { constRoutes } from './routes'
 
 const router = createRouter({
     history: createWebHashHistory(), //hash模式
-    routes:constRoutes,
+    routes: constRoutes,
     scrollBehavior() {
         return {
             left: 0,
