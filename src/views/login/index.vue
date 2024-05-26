@@ -106,6 +106,7 @@
             message: '登录成功',
             type: 'success'
         })
+        window.location.reload()
     }
 </script>
 
